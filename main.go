@@ -12,7 +12,7 @@ import (
 
 // @title go-boilerplate API
 // @version 1.0
-// @description go-boilerplate is an simple API for request and confirm OTP.
+// @description go-boilerplate is an boilerplate template for REST API.
 // @contact.name Yoga
 // @contact.email yoga.grahadi@gmail.com
 // @accept application/json

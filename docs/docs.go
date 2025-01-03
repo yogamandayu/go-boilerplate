@@ -125,7 +125,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ping": {
+        "/healthcheck": {
             "get": {
                 "description": "Responds with \"Pong\" and stack status.",
                 "consumes": [
@@ -142,7 +142,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/ping.ResponseContract"
+                            "$ref": "#/definitions/healthcheck.ResponseContract"
                         }
                     }
                 }
@@ -158,7 +158,7 @@ const docTemplate = `{
                 }
             }
         },
-        "ping.DbStatus": {
+        "healthcheck.DbStatus": {
             "type": "object",
             "properties": {
                 "acquired_conns": {
@@ -175,7 +175,7 @@ const docTemplate = `{
                 }
             }
         },
-        "ping.RedisStatus": {
+        "healthcheck.RedisStatus": {
             "type": "object",
             "properties": {
                 "idle_conns": {
@@ -192,28 +192,28 @@ const docTemplate = `{
                 }
             }
         },
-        "ping.ResponseContract": {
+        "healthcheck.ResponseContract": {
             "type": "object",
             "properties": {
                 "message": {
                     "type": "string"
                 },
                 "stack_status": {
-                    "$ref": "#/definitions/ping.StackStatus"
+                    "$ref": "#/definitions/healthcheck.StackStatus"
                 },
                 "timestamp": {
                     "type": "string"
                 }
             }
         },
-        "ping.StackStatus": {
+        "healthcheck.StackStatus": {
             "type": "object",
             "properties": {
                 "db": {
-                    "$ref": "#/definitions/ping.DbStatus"
+                    "$ref": "#/definitions/healthcheck.DbStatus"
                 },
                 "redis": {
-                    "$ref": "#/definitions/ping.RedisStatus"
+                    "$ref": "#/definitions/healthcheck.RedisStatus"
                 }
             }
         },

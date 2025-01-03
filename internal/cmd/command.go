@@ -6,13 +6,10 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/yogamandayu/go-boilerplate/pkg/rollbar"
-
 	"github.com/yogamandayu/go-boilerplate/internal/app"
 	"github.com/yogamandayu/go-boilerplate/internal/config"
 	"github.com/yogamandayu/go-boilerplate/internal/interfaces/rest"
 	"github.com/yogamandayu/go-boilerplate/pkg/db"
-	"github.com/yogamandayu/go-boilerplate/pkg/redis"
 	"github.com/yogamandayu/go-boilerplate/pkg/slog"
 
 	"github.com/jackc/tern/v2/migrate"
@@ -40,48 +37,18 @@ func (cmd *Command) Commands() cli.Commands {
 			Aliases: []string{"r"},
 			Usage:   "Run REST API",
 			Action: func(cCtx *cli.Context) error {
-				dbConn, err := db.NewConnection(cmd.conf.DB.Config)
-				if err != nil {
-					log.Fatal(err)
-				}
-				defer dbConn.Close()
-
-				redisAPIConn, err := redis.NewConnection(cmd.conf.RedisAPI.Config)
-				if err != nil {
-					log.Fatal(err)
-				}
-				defer redisAPIConn.Close()
-
-				redisNotificationConn, err := redis.NewConnection(cmd.conf.RedisWorkerNotification.Config)
-				if err != nil {
-					log.Fatal(err)
-				}
-				defer redisAPIConn.Close()
 
 				slogger := slog.NewSlog()
-
-				rollbarClient := rollbar.NewRollbar(cmd.conf.Rollbar.Config)
-				if util.GetEnvAsBool("ENABLE_ROLLBAR", false) {
-					rollbarClient.SetEnabled(true)
-				}
-
-				defer rollbarClient.Close()
-
 				a := app.NewApp().WithOptions(
 					app.WithConfig(cmd.conf),
-					app.WithDB(dbConn),
-					app.WithDBRepository(dbConn),
-					app.WithRedisAPI(redisAPIConn),
-					app.WithRedisWorkerNotification(redisNotificationConn),
 					app.WithSlog(slogger),
-					app.WithRollbar(rollbarClient),
 				)
 
 				r := rest.NewREST(a)
 				opts := []rest.Option{
 					rest.SetByConfig(cmd.conf),
 				}
-				if err = r.With(opts...).Run(); err != nil {
+				if err := r.With(opts...).Run(); err != nil {
 					return err
 				}
 				return nil

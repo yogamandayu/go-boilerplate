@@ -34,6 +34,9 @@ func (s *SuccessResponse) WithStatusCode(code int) *SuccessResponse {
 // AsJSON is to set success response as JSON.
 func (s *SuccessResponse) AsJSON(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
+	if s.HTTPStatusCode == 0 {
+		s.HTTPStatusCode = http.StatusOK
+	}
 	w.WriteHeader(s.HTTPStatusCode)
 	_ = json.NewEncoder(w).Encode(s)
 }

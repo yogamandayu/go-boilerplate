@@ -5,10 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/yogamandayu/go-boilerplate/tests"
-
 	"github.com/stretchr/testify/require"
 	"github.com/yogamandayu/go-boilerplate/pkg/telegram"
+	"github.com/yogamandayu/go-boilerplate/tests"
 )
 
 func TestTelegramBotSendMessage(t *testing.T) {

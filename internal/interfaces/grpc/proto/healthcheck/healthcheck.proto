@@ -1,0 +1,17 @@
+syntax = "proto3";
+package healthcheck;
+option go_package = "internal/interfaces/grpc/protobuf/healthcheck";
+
+message PingRequest {
+
+}
+
+message PingResponse {
+  string timestamp = 1;
+  string message = 2;
+}
+
+
+service PingService {
+  rpc Ping(PingRequest) returns (PingResponse);
+}

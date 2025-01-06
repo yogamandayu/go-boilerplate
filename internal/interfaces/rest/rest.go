@@ -15,36 +15,36 @@ import (
 	"github.com/yogamandayu/go-boilerplate/internal/interfaces/rest/route"
 )
 
-// REST is a http rest api struct.
-type REST struct {
+// Server is a http rest api struct.
+type Server struct {
 	app *app.App
 
 	Port    string
 	Handler http.Handler
 }
 
-// NewREST is a constructor.
-func NewREST(app *app.App) *REST {
-	return &REST{
+// NewServer is a constructor.
+func NewServer(app *app.App) *Server {
+	return &Server{
 		app:  app,
 		Port: ":8080",
 	}
 }
 
 // With is to set option.
-func (r *REST) With(opts ...Option) *REST {
+func (s *Server) With(opts ...Option) *Server {
 	for _, opt := range opts {
-		opt(r)
+		opt(s)
 	}
 
-	return r
+	return s
 }
 
 // Run is to run http rest api service.
-func (r *REST) Run() error {
-	router := route.NewRouter(r.app)
+func (s *Server) Run() error {
+	router := route.NewRouter(s.app)
 	server := http.Server{
-		Addr:         fmt.Sprintf(":%s", r.Port),
+		Addr:         fmt.Sprintf(":%s", s.Port),
 		Handler:      router.Handler(),
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 60 * time.Second,
@@ -64,11 +64,11 @@ func (r *REST) Run() error {
 		log.Println("Shutdown complete")
 	}()
 
-	log.Println("HTTP server is starting ...")
+	log.Println("HTTP Server server is starting ...")
 	if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-		log.Fatalf("listen %s error: %v", r.Port, err)
+		log.Fatalf("listen %s error: %v", s.Port, err)
 	}
-	log.Println("Shutting down HTTP server gracefully...")
+	log.Println("Shutting down HTTP Server server gracefully...")
 
 	return nil
 }

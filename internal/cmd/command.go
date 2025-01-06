@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/yogamandayu/go-boilerplate/internal/interfaces/grpc"
 	"log"
 	"os"
 	"os/exec"
@@ -35,7 +36,7 @@ func (cmd *Command) Commands() cli.Commands {
 		{
 			Name:    "http:rest",
 			Aliases: []string{"r"},
-			Usage:   "Run REST API",
+			Usage:   "Run Server API",
 			Action: func(cCtx *cli.Context) error {
 
 				slogger := slog.NewSlog()
@@ -44,9 +45,31 @@ func (cmd *Command) Commands() cli.Commands {
 					app.WithSlog(slogger),
 				)
 
-				r := rest.NewREST(a)
+				r := rest.NewServer(a)
 				opts := []rest.Option{
 					rest.SetByConfig(cmd.conf),
+				}
+				if err := r.With(opts...).Run(); err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+		{
+			Name:    "http:grpc",
+			Aliases: []string{"g"},
+			Usage:   "Run gRPC API",
+			Action: func(cCtx *cli.Context) error {
+
+				slogger := slog.NewSlog()
+				a := app.NewApp().WithOptions(
+					app.WithConfig(cmd.conf),
+					app.WithSlog(slogger),
+				)
+
+				r := grpc.NewServer(a)
+				opts := []grpc.Option{
+					grpc.SetByConfig(cmd.conf),
 				}
 				if err := r.With(opts...).Run(); err != nil {
 					return err

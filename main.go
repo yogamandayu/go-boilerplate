@@ -27,6 +27,7 @@ func main() {
 		config.WithRedisAPIConfig(),
 		config.WithRedisWorkerNotificationConfig(),
 		config.WithRESTConfig(),
+		config.WithGRPCConfig(),
 		config.WithTelegramBotConfig(),
 		config.WithRollbarConfig(),
 	)

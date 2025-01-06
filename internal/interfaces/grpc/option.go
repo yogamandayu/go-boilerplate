@@ -1,4 +1,4 @@
-package rest
+package grpc
 
 import (
 	"github.com/yogamandayu/go-boilerplate/internal/app"
@@ -8,7 +8,7 @@ import (
 // Option is option to rest struct.
 type Option func(r *Server)
 
-// SetByConfig to set Server API with config.
+// SetByConfig to set REST API with config.
 func SetByConfig(config *config.Config) Option {
 	return func(r *Server) {
 		r.Port = config.REST.Port

@@ -14,6 +14,7 @@ import (
 // Config is a struct to hold all config.
 type Config struct {
 	REST                    *RESTConfig
+	GRPC                    *GRPCConfig
 	DB                      *DBConfig
 	RedisAPI                *RedisConfig
 	RedisWorkerNotification *RedisConfig
@@ -110,6 +111,18 @@ func WithRESTConfig() Option {
 			c.REST = &RESTConfig{}
 		}
 		c.REST = &RESTConfig{
+			Port: util.GetEnv("APP_PORT", "8080"),
+		}
+	}
+}
+
+// WithGRPCConfig is to set gRPC API config.
+func WithGRPCConfig() Option {
+	return func(c *Config) {
+		if c.GRPC == nil {
+			c.GRPC = &GRPCConfig{}
+		}
+		c.GRPC = &GRPCConfig{
 			Port: util.GetEnv("APP_PORT", "8080"),
 		}
 	}

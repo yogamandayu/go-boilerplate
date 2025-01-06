@@ -21,6 +21,9 @@ type Server struct {
 	Port string
 }
 
+// Option is option to rest struct.
+type Option func(r *Server)
+
 func NewServer(app *app.App) *Server {
 	return &Server{
 		app:  app,
@@ -42,6 +45,7 @@ func (s *Server) Run() error {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+
 	var opts []grpc.ServerOption
 
 	grpcServer := grpc.NewServer(opts...)

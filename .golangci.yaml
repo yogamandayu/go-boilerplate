@@ -1,23 +1,41 @@
+linters-settings:
+  goimports:
+    local-prefixes: github.com/yogamandayu/go-boilerplate # Replace with your module name
+
+  gocyclo:
+    min-complexity: 20
+
+  errcheck:
+    exclude-functions:
+      - Close # Updated from `exclude` to `exclude-functions`
+
+  funlen:
+    lines: 60
+    statements: 20
+
 run:
-  timeout: 5m
-  concurrency: 10
+  timeout: 2m
 
 linters:
+  disable-all: true # Start with all linters disabled, then enable only the ones you want
   enable:
     - errcheck
-    - govet
+    - gocyclo
     - gofmt
     - goimports
+    - govet
+    - ineffassign
     - staticcheck
-    - gocritic
-    - unconvert
-    - misspell
-    # Add other linters as needed
-
-linters-settings:
-  govet:
-    enable-all: true
+    - unused
 
 issues:
-  exclude-rules:
-  # Add exclusions as needed
+  exclude-use-default: false
+  exclude-dirs: # Updated from `run.skip-dirs`
+    - vendor
+  exclude-files: # Updated from `run.skip-files`
+    - ".*_test.go"
+
+output:
+  formats: # Use a map format for output
+    - format: colored-line-number
+  sort-results: true

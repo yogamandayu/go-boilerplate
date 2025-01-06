@@ -123,7 +123,7 @@ func WithGRPCConfig() Option {
 			c.GRPC = &GRPCConfig{}
 		}
 		c.GRPC = &GRPCConfig{
-			Port: util.GetEnv("APP_PORT", "8080"),
+			Port: util.GetEnv("APP_GRPC_PORT", "4080"),
 		}
 	}
 }

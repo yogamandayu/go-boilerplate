@@ -1,26 +1,39 @@
 #!/bin/sh
 
+# Get all staged Go files
 STAGED_GO_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.go$')
 
-if [[ -z "$STAGED_GO_FILES" ]]; then
-  echo "No staged Go files changed. Skipping pre-commit checks."
+if [ -z "$STAGED_GO_FILES" ]; then
+  echo "No staged Go files found. Skipping pre-commit checks."
   exit 0
 fi
 
-printf "Running pre-commit checks on staged Go files...\n"
+echo "Running pre-commit checks on staged Go files..."
 
-# Run golangci-lint on all staged files. Capture and display output.
-golangci-lint run --config=.golangci.yaml $(echo "$STAGED_GO_FILES")
-if [[ $? != 0 ]]; then
-  printf "golangci-lint checks failed. Please fix the issues and stage the changes.\n"
+FAILED=false # Track if any check fails
+
+# Group files by directory and lint each directory
+for dir in $(echo "$STAGED_GO_FILES" | xargs -n1 dirname | sort -u); do
+  echo "Checking directory: $dir"
+  if ! golangci-lint run --config=.golangci.yaml "$dir"; then
+    echo "golangci-lint checks failed in directory: $dir"
+    FAILED=true
+  fi
+done
+
+# Format and organize imports for staged files
+for file in $STAGED_GO_FILES; do
+  echo "Formatting $file..."
+  go fmt "$file" || FAILED=true
+  goimports -local github.com/yogamandayu/go-boilerplate -w "$file" || FAILED=true
+  git add "$file" # Re-add formatted files to staging
+done
+
+# If any check failed, exit with failure
+if [ "$FAILED" = true ]; then
+  echo "One or more pre-commit checks failed. Please fix the issues and try again."
   exit 1
 fi
 
-# Format all staged files in one command.
-go fmt $(echo "$STAGED_GO_FILES")
-
-# Organize imports for all staged files in one command.
-goimports -w $(echo "$STAGED_GO_FILES")
-
-printf "Pre-commit checks passed.\n"
+echo "All pre-commit checks passed."
 exit 0

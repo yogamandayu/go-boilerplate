@@ -17,6 +17,7 @@ import (
 // @contact.email yoga.grahadi@gmail.com
 // @accept application/json
 func main() {
+
 	if err := godotenv.Load(); err != nil {
 		log.Println("no .env file provided")
 	}

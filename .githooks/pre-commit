@@ -1,43 +1,26 @@
 #!/bin/sh
-#
-# An example hook script to verify what is about to be committed.
-# Called by "git commit" with no arguments.  The hook should
-# exit with non-zero status after issuing an appropriate message if
-# it wants to stop the commit.
-#
-# To enable this hook, rename this file to "pre-commit".
 
-STAGED_GO_FILES=$(git diff --cached --name-only | grep ".go$")
+STAGED_GO_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.go$')
 
-if [[ "$STAGED_GO_FILES" = "" ]]; then
-  echo "No go files changed"
+if [[ -z "$STAGED_GO_FILES" ]]; then
+  echo "No staged Go files changed. Skipping pre-commit checks."
   exit 0
 fi
 
-PASS=true
+printf "Running pre-commit checks on staged Go files...\n"
 
-for FILE in $STAGED_GO_FILES
-do
-    go fmt $FILE
-
-    goimports -w $FILE
-
-    gocritic check $FILE
-    if [[ $? == 1 ]]; then
-        PASS=false
-    fi
-done
-
-staticcheck ./...
-if [[ $? == 1 ]]; then
-        PASS=false
+# Run golangci-lint on all staged files. Capture and display output.
+golangci-lint run --config=.golangci.yaml $(echo "$STAGED_GO_FILES")
+if [[ $? != 0 ]]; then
+  printf "golangci-lint checks failed. Please fix the issues and stage the changes.\n"
+  exit 1
 fi
 
-if ! $PASS; then
-    printf "COMMIT FAILED\n"
-    exit 1
-else
-    printf "COMMIT SUCCEEDED\n"
-fi
+# Format all staged files in one command.
+go fmt $(echo "$STAGED_GO_FILES")
 
+# Organize imports for all staged files in one command.
+goimports -w $(echo "$STAGED_GO_FILES")
+
+printf "Pre-commit checks passed.\n"
 exit 0

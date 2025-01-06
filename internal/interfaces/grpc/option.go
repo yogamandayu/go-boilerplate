@@ -8,7 +8,7 @@ import (
 // SetByConfig to set REST API with config.
 func SetByConfig(config *config.Config) Option {
 	return func(r *Server) {
-		r.Port = config.REST.Port
+		r.Port = config.GRPC.Port
 	}
 }
 

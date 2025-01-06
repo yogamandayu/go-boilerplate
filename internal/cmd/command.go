@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/yogamandayu/go-boilerplate/internal/interfaces/grpc"
 	"log"
 	"os"
 	"os/exec"
+
+	"github.com/yogamandayu/go-boilerplate/internal/interfaces/grpc"
 
 	"github.com/yogamandayu/go-boilerplate/internal/app"
 	"github.com/yogamandayu/go-boilerplate/internal/config"

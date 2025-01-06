@@ -3,15 +3,16 @@ package grpc
 import (
 	"errors"
 	"fmt"
+	"log"
+	"net"
+	"net/http"
+
 	"github.com/yogamandayu/go-boilerplate/internal/app"
 	"github.com/yogamandayu/go-boilerplate/internal/interfaces/grpc/handler/healthcheck"
 	healthcheckPB "github.com/yogamandayu/go-boilerplate/internal/interfaces/grpc/protobuf/healthcheck"
 	"github.com/yogamandayu/go-boilerplate/util"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"log"
-	"net"
-	"net/http"
 )
 
 type Server struct {

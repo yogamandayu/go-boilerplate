@@ -2,9 +2,10 @@ package healthcheck
 
 import (
 	"context"
+	"time"
+
 	healthcheckPB "github.com/yogamandayu/go-boilerplate/internal/interfaces/grpc/protobuf/healthcheck"
 	"github.com/yogamandayu/go-boilerplate/internal/workflow/healthcheck"
-	"time"
 )
 
 type Handler struct {

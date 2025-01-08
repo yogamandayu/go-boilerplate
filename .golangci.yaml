@@ -1,6 +1,6 @@
 linters-settings:
   goimports:
-    local-prefixes: github.com/yogamandayu/go-boilerplate # Replace with your module name
+    local-prefixes: gitlab.com/ersvitation/user # Replace with your module name
 
   gocyclo:
     min-complexity: 20
@@ -19,11 +19,14 @@ run:
 linters:
   disable-all: true # Start with all linters disabled, then enable only the ones you want
   enable:
+    - whitespace
+    - stylecheck
     - errcheck
     - gocyclo
     - gofmt
     - goimports
     - govet
+    - gocritic
     - ineffassign
     - staticcheck
     - unused

@@ -14,11 +14,10 @@ import (
 	"github.com/yogamandayu/go-boilerplate/internal/interfaces/rest"
 	"github.com/yogamandayu/go-boilerplate/pkg/db"
 	"github.com/yogamandayu/go-boilerplate/pkg/slog"
+	"github.com/yogamandayu/go-boilerplate/util"
 
 	"github.com/jackc/tern/v2/migrate"
 	"github.com/urfave/cli/v2"
-
-	"github.com/yogamandayu/go-boilerplate/util"
 )
 
 // Command is a run service command.

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/yogamandayu/go-boilerplate/internal/interfaces/rest/response"
-	"github.com/yogamandayu/go-boilerplate/internal/workflow/healthcheck"
+	"github.com/yogamandayu/go-boilerplate/internal/usecase/healthcheck"
 
 	_ "github.com/yogamandayu/go-boilerplate/docs"
 )
@@ -20,7 +20,9 @@ import (
 // @Success      200 {object} ResponseContract
 // @Router       /healthcheck [get]
 func (h *Handler) Ping(w http.ResponseWriter, r *http.Request) {
-	ctx, _ := context.WithTimeout(r.Context(), 5*time.Second)
+	ctx, cancelCtx := context.WithTimeout(r.Context(), 5*time.Second)
+	defer cancelCtx()
+
 	pingWorkflow := healthcheck.NewPingWorkflow()
 	status := pingWorkflow.Ping(ctx)
 	data := PingResponseContract{

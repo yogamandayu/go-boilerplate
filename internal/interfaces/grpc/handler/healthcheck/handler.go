@@ -1,3 +1,4 @@
+// Package healthcheck is a package to all health check related gRPC API handler request.
 package healthcheck
 
 import (
@@ -5,7 +6,7 @@ import (
 	"time"
 
 	healthcheckPB "github.com/yogamandayu/go-boilerplate/internal/interfaces/grpc/protobuf/healthcheck"
-	"github.com/yogamandayu/go-boilerplate/internal/workflow/healthcheck"
+	"github.com/yogamandayu/go-boilerplate/internal/usecase/healthcheck"
 )
 
 type Handler struct {
@@ -15,7 +16,9 @@ type Handler struct {
 var _ healthcheckPB.PingServiceServer = &Handler{}
 
 func (h Handler) Ping(ctx context.Context, request *healthcheckPB.PingRequest) (*healthcheckPB.PingResponse, error) {
-	ctx, _ = context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancelCtx := context.WithTimeout(ctx, 5*time.Second)
+	defer cancelCtx()
+
 	pingWorkflow := healthcheck.NewPingWorkflow()
 	status := pingWorkflow.Ping(ctx)
 	return &healthcheckPB.PingResponse{

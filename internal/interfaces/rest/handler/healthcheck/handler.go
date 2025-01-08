@@ -1,3 +1,4 @@
+// Package healthcheck is a package to all health check related REST API handler request.
 package healthcheck
 
 import (

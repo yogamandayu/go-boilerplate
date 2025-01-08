@@ -1,3 +1,4 @@
+// Package cmd is a package that command the service.
 package cmd
 
 import (
@@ -16,6 +17,7 @@ import (
 
 	"github.com/jackc/tern/v2/migrate"
 	"github.com/urfave/cli/v2"
+
 	"github.com/yogamandayu/go-boilerplate/util"
 )
 
@@ -39,7 +41,6 @@ func (cmd *Command) Commands() cli.Commands {
 			Aliases: []string{"r"},
 			Usage:   "Run Server API",
 			Action: func(cCtx *cli.Context) error {
-
 				slogger := slog.NewSlog()
 				a := app.NewApp().WithOptions(
 					app.WithConfig(cmd.conf),
@@ -61,7 +62,6 @@ func (cmd *Command) Commands() cli.Commands {
 			Aliases: []string{"g"},
 			Usage:   "Run gRPC API",
 			Action: func(cCtx *cli.Context) error {
-
 				slogger := slog.NewSlog()
 				a := app.NewApp().WithOptions(
 					app.WithConfig(cmd.conf),
@@ -83,14 +83,13 @@ func (cmd *Command) Commands() cli.Commands {
 			Aliases: []string{"dbm"},
 			Usage:   "Run database migration with tern",
 			Action: func(cCtx *cli.Context) error {
-
 				dbConn, err := db.NewConnection(cmd.conf.DB.Config)
 				if err != nil {
 					log.Fatal(err)
 				}
 				defer dbConn.Close()
 
-				migrationsDir := os.DirFS(fmt.Sprintf("%s/internal/domain/migrations", util.RootDir()))
+				migrationsDir := os.DirFS(fmt.Sprintf("%s/internal/infrastructure/database/migrations", util.RootDir()))
 
 				pgConn, err := dbConn.Acquire(cCtx.Context)
 				if err != nil {
